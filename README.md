@@ -1,6 +1,6 @@
 ---
 
-## 🔬 Hypothesis 2 — Fix Docker Monitoring by Adding Receivers
+## Hypothesis 2 — Fix Docker Monitoring by Adding Receivers
 
 ### What We Did
 
