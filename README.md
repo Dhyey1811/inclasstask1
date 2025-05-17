@@ -1,46 +1,21 @@
-# signoz
-signoz demo with docker-compose 
-
-```bash
-ansible-playbook up.yml
-```
-
-This does docker compose up on an "empty" signoz in a codespace. Use this as a starting point for instrumenting your app.
-
-```bash
-ansible-playbook down.yml
-```
-
-This does docker compose down on the clickhouse-setup/docker-compose-minimal.yaml (the same docker-compose file from up.yml)
-# Signoz Docker Monitoring — Hypothesis 1
-
-## Problem
-
-Signoz is expected to monitor Docker containers, collecting logs and metrics. However, in the [rhildred/signoz](https://github.com/rhildred/signoz) setup, this does not seem to work as expected.
-
 ---
 
-## Hypothesis 1
+## 🔬 Hypothesis 2 — Fix Docker Monitoring by Adding Receivers
 
-> Docker monitoring does not work because the OpenTelemetry Collector configuration is missing required receivers such as:
->
-> - `tcplog/docker` for logs
-> - `docker_stats` for container metrics
+### What We Did
 
----
+- Enabled `tcplog/docker` and `docker_stats` receivers in `otel-collector-config.yaml`
+- Updated the pipelines for `logs` and `metrics`
 
-##  What We Changed
+### How to Test
 
-- We commented out or removed the `tcplog/docker` and `docker_stats` receivers in the `otel-collector-config.yaml` file.
-- This simulates a misconfigured setup to confirm whether Docker logs and metrics are missing due to the absence of these receivers.
+1. `git checkout test/fix-dockerstats-working`
+2. Run: `docker-compose up --build`
+3. Go to [http://localhost:3301](http://localhost:3301)
+4. Verify:
+   - Container logs appear in **Logs tab**
+   - CPU, memory usage appear in **Metrics tab**
 
----
+### Conclusion
 
-## How to Run This Test
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/signoz.git
-cd signoz
-
+This confirms that enabling the correct receivers in OpenTelemetry Collector fixes Docker monitoring in Signoz.
